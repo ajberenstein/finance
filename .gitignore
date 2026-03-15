@@ -11,6 +11,7 @@ dist/
 # Virtual environments
 env/
 venv/
+.venv/
 ENV/
 
 # Jupyter Notebook
