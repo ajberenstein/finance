@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "yahoo-finance": {
+      "command": "/home/user/finance/.venv/bin/yahoo-finance-mcp"
+    }
+  }
+}
