@@ -2,9 +2,8 @@
   "mcpServers": {
     "yahoo-finance": {
       "type": "stdio",
-      "command": "/home/user/finance/.venv/bin/yahoo-finance-mcp",
-      "args": [],
-      "env": {}
+      "command": "uv",
+      "args": ["run", "--project", ".", "yahoo-finance-mcp"]
     }
   }
 }
