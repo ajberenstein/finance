@@ -77,6 +77,82 @@ Once connected, you can ask your LLM things like:
 - "Screen the market for tech stocks with market cap over 10 billion"
 - "What are the top institutional holders of NVDA?"
 
+## Remote deployment (DigitalOcean / Hetzner VPS)
+
+The server can run remotely and be consumed by Claude Desktop or Claude.ai web via HTTPS.
+It uses [Caddy](https://caddyserver.com/) as a reverse proxy with automatic TLS via Let's Encrypt,
+and [sslip.io](https://sslip.io) for a free HTTPS domain derived from the server IP.
+
+### First-time setup on a fresh Ubuntu VPS
+
+```bash
+# 1. Install Docker
+curl -fsSL https://get.docker.com | sh
+
+# 2. Clone the repo
+git clone https://github.com/ajberenstein/finance.git /opt/yahoo-finance-mcp
+cd /opt/yahoo-finance-mcp
+
+# 3. Set your domain (replace dots with dashes in the server IP)
+#    Example: IP 1.2.3.4 → DOMAIN=1-2-3-4.sslip.io
+echo "DOMAIN=YOUR-IP-WITH-DASHES.sslip.io" > .env
+
+# 4. Build and start
+docker compose up -d --build
+```
+
+The server will be available at `https://YOUR-IP-WITH-DASHES.sslip.io/sse`.
+
+### Updating after a code change
+
+```bash
+cd /opt/yahoo-finance-mcp && git pull && docker compose up -d --build
+```
+
+### Useful ops commands
+
+```bash
+# Check running containers
+docker compose ps
+
+# Follow live logs
+docker compose logs -f
+
+# Restart without rebuilding
+docker compose restart
+
+# Stop everything
+docker compose down
+```
+
+### Connect Claude Desktop to the remote server
+
+Add to `claude_desktop_config.json`:
+
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "yahoo-finance": {
+      "url": "https://YOUR-IP-WITH-DASHES.sslip.io/sse"
+    }
+  }
+}
+```
+
+### Connect Claude.ai web
+
+Settings → Integrations → Add MCP Server → enter your `https://…sslip.io/sse` URL.
+
+## Running tests
+
+```bash
+pip install -e ".[dev]"
+python -m pytest tests/
+```
+
 ## Requirements
 
 - Python >= 3.10
