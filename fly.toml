@@ -1,0 +1,23 @@
+# fly.toml — Yahoo Finance MCP Server
+# Rename "yahoo-finance-mcp" below if el nombre ya está tomado en Fly.io.
+# Tu URL quedará: https://<app>.fly.dev
+
+app = "yahoo-finance-mcp"
+primary_region = "gru"   # São Paulo — más cercano a Argentina
+
+[build]
+
+[env]
+  MCP_TRANSPORT = "sse"
+  PORT          = "8000"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus     = 1
+  memory   = "256mb"
+
+[http_service]
+  internal_port        = 8000
+  force_https          = true
+  auto_stop_machines   = "off"   # Necesario: SSE requiere conexión persistente
+  min_machines_running = 1
