@@ -1,0 +1,5 @@
+{$DOMAIN} {
+    reverse_proxy yahoo-finance-mcp:8000 {
+        flush_interval -1
+    }
+}
