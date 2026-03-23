@@ -1,0 +1,9 @@
+services:
+  yahoo-finance-mcp:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      MCP_TRANSPORT: sse
+      PORT: 8000
+    restart: unless-stopped

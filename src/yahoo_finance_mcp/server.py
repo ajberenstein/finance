@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from typing import Any
 
@@ -10,7 +11,11 @@ import pandas as pd
 import yfinance as yf
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("Yahoo Finance")
+_TRANSPORT = os.environ.get("MCP_TRANSPORT", "stdio")
+_HOST = os.environ.get("HOST", "0.0.0.0")
+_PORT = int(os.environ.get("PORT", "8000"))
+
+mcp = FastMCP("Yahoo Finance", host=_HOST, port=_PORT)
 
 
 # ---------------------------------------------------------------------------
@@ -792,7 +797,7 @@ def get_ttm_financials(ticker: str) -> str:
 
 def main():
     """Run the Yahoo Finance MCP server."""
-    mcp.run()
+    mcp.run(transport=_TRANSPORT)
 
 
 if __name__ == "__main__":
